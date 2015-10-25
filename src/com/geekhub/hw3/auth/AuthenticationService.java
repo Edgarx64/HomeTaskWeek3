@@ -9,12 +9,14 @@ public class AuthenticationService {
             User blah = authService.auth("blah", "blah");
         } catch (AuthException e) {
             //TODO: react
+            e.printStackTrace();
         }
 
         try {
             User batman = authService.auth("Batman", "catwoman");
         } catch (AuthException e) {
             //TODO: react
+            e.printStackTrace();
         }
     }
 
@@ -25,6 +27,28 @@ public class AuthenticationService {
 
     private User auth(String login, String password) throws AuthException {
         //TODO: Implement me
-        return null;
+        if (login.equals(""))
+            throw WrongCredentialsException();
+        for (User user : users) {
+            if (user.getLogin().equals(login)) {
+                if (user.getPassword().equals(password))
+                    return user;
+                else
+                    throw WrongPasswordException();
+            }
+        }
+        throw UserNotFoundException();
+    }
+
+    private AuthException WrongPasswordException() {
+        return new AuthException("WrongPasswordException");
+    }
+
+    private AuthException WrongCredentialsException() {
+        return new AuthException("WrongCredentialsException");
+    }
+
+    private AuthException UserNotFoundException() {
+        return new AuthException("UserNotFoundException");
     }
 }
